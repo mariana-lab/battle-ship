@@ -30,7 +30,7 @@ public class MapHandler {
         System.out.println(buildInitial(map));
     }
 
-    private static String buildInitial(String[][] map) {
+    public static String buildInitial(String[][] map) {
         StringBuilder initialMapBuilder = new StringBuilder();
         initialMapBuilder.append(PADDING);
 

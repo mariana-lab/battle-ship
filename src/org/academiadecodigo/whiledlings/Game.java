@@ -13,6 +13,7 @@ public class Game {
 
     public Game() {
         players = Collections.synchronizedList(new LinkedList<Player>());
+        maps = Collections.synchronizedList(new LinkedList<String[][]>());
         hasStarted = false;
     }
 
@@ -30,14 +31,13 @@ public class Game {
             if(!isFull()){
                 players.add(player);
                 maps.add(MapHandler.getNewMap());
-                System.out.println(player.getUsername() + "has been added to game");
+                System.out.println(player.getUsername() + " has been added to game");
                 return;
             }
         }
     }
 
     public void start(){
-        System.out.println("game has started");
         if (hasStarted){
             return;
         }
@@ -66,7 +66,7 @@ public class Game {
         @Override
         public void run() {
             //build initial map
-            player.send(MapHandler.build(map));
+            player.send(MapHandler.buildInitial(map));
             //ask for boat 1 initpos
             //ask for boat 1 final pos, keep doing this for every boat
         }
