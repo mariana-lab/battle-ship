@@ -91,4 +91,8 @@ public class ConnectionHandler implements Runnable {
     public String getUsername() {
         return player.getUsername();
     }
+
+    public Player getPlayer() {
+        return this.player;
+    }
 }

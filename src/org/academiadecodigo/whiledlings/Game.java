@@ -1,14 +1,46 @@
 package org.academiadecodigo.whiledlings;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Game {
-    private String player1;
-    private String player2;
+    private static final int MAX_PLAYERS = 2;
+    private List<Player> players;
+    private boolean hasStarted;
 
-    private int p1points;
-    private int p2points;
+    public Game() {
+        players = Collections.synchronizedList(new LinkedList<Player>());
+        hasStarted = false;
+    }
 
+    public Game(Player player) {
+        this();
+        addPlayer(player);
+    }
 
     public boolean isFull() {
-        return (player1 != null && player2 != null);
+        return players.size()>= MAX_PLAYERS;
+    }
+
+    public void addPlayer(Player player) {
+        synchronized (players) {
+            if(!isFull()){
+                players.add(player);
+                return;
+            }
+        }
+    }
+
+    public void start(){
+        if (hasStarted){
+            return;
+        }
+        //send the maps to be filled
+        //wait for the filled maps
+        //ask player1 to play
+        //check if he has got it, if yes, ask again
+        //ask player 2 to guess, "
+
+
     }
 }

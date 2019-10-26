@@ -6,7 +6,10 @@ import org.academiadecodigo.whiledlings.Game;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,13 +17,13 @@ public class Server {
 
     private ServerSocket serverSocket;
     private final ExecutorService executorService;
-    private HashMap<String, Game> games;
-    private HashMap<String, Player> players;
+    private List<Game> games;
+    private ConcurrentHashMap<String, Player> players;
 
 
     public Server() {
-        this.games = new HashMap<>();
-        this.players = new HashMap<>();
+        this.games = Collections.synchronizedList(new LinkedList<Game>());
+        this.players = new ConcurrentHashMap<>();
         this.executorService = Executors.newCachedThreadPool();
         try {
             this.serverSocket = new ServerSocket(4040);
@@ -43,8 +46,10 @@ public class Server {
     }
 
     public boolean hasPlayer(String name) {
-        for ( String s : players.keySet()) {
-            System.out.println(s);
+        synchronized (players) {
+            for (String s : players.keySet()) {
+                System.out.println(s);
+            }
         }
         return players.containsKey(name);
     }
@@ -53,14 +58,16 @@ public class Server {
         players.put(player.getName(), player);
     }
 
-    public void removePlayer(Player player){
+    public void removePlayer(Player player) {
         players.remove(player.getName());
     }
 
     public void broadcast(String message) {
-        for (String name: players.keySet()) {
-            if(!players.get(name).isPlaying()){
-                players.get(name).send(message);
+        synchronized (players) {
+            for (String name : players.keySet()) {
+                if (!players.get(name).isPlaying()) {
+                    players.get(name).send(message);
+                }
             }
         }
     }
@@ -73,6 +80,16 @@ public class Server {
         return list;
     }
 
+    public void addPlayerToGame(Player player) {
+        for (Game game: games) {
+            if(game.isFull()){
+                continue;
+            }
+            game.addPlayer(player);
+        }
+        // TODO: 26/10/2019 give random awsome names to the rooms
+        games.add(new Game(player));
+    }
 
 
 
