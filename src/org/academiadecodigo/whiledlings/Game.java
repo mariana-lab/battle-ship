@@ -1,11 +1,15 @@
 package org.academiadecodigo.whiledlings;
+import org.academiadecodigo.whiledlings.map.MapHandler;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Game {
     private static final int MAX_PLAYERS = 2;
     private List<Player> players;
+    private List<String[][]> maps;
     private boolean hasStarted;
 
     public Game() {
@@ -26,6 +30,7 @@ public class Game {
         synchronized (players) {
             if(!isFull()){
                 players.add(player);
+                maps.add(MapHandler.getNewMap());
                 return;
             }
         }
@@ -35,12 +40,32 @@ public class Game {
         if (hasStarted){
             return;
         }
+
         //send the maps to be filled
+        Thread thread = new Thread(new MapSetup(players.get(0),maps.get(0)));
+        MapSetup mapSetup = new MapSetup(players.get(1), maps.get(1));
+        thread.start();
         //wait for the filled maps
         //ask player1 to play
         //check if he has got it, if yes, ask again
         //ask player 2 to guess, "
+    }
 
 
+    private class MapSetup implements Runnable {
+        private final Player player;
+        private final String[][] map;
+
+        public MapSetup(Player player, String[][] map) {
+            this.player = player;
+            this.map = map;
+        }
+
+        @Override
+        public void run() {
+            //print initial map
+            //ask for boat 1 initpos
+            //ask for boat 1 final pos, keep doing this for every boat
+        }
     }
 }
