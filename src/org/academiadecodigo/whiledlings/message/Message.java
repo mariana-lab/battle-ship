@@ -14,16 +14,26 @@ public class Message {
     public static final String[] COLOR_OPTIONS = {ANSI_BLUE + "BLUE" + ANSI_RESET, ANSI_GREEN + "GREEN" + ANSI_RESET, ANSI_YELLOW + "YELLOW" + ANSI_RESET, ANSI_RED + "RED" + ANSI_RESET, ANSI_WHITE + "WHITE" + ANSI_RESET};
     public static final String SPECIAL_ROOM = "Welcome to room ";
 
+    public static final String FINDING_GAME = "Finding a game where you can sink ships...";
 
-    public static final String ASK_IN_POSITION_OF_SHIP = "Please select the initial position <LETTER><NUM> of ";
+    public static final String ASK_IN_POSITION_OF_SHIP = ANSI_YELLOW + "Please select the initial position of " + ANSI_RESET;
     public static final String ASK_FIN_POSITION_OF_SHIP = "Please select the final position <LETTER><NUM> of ";
 
+    public static final String EMPTY = ANSI_RESET + " " + ANSI_YELLOW_BACKGROUND;
+    public static final String DESTROYER = ANSI_YELLOW + " D E S T R O Y E R";
+    public static final String DESTROYER_NUM = EMPTY + " 1 " + EMPTY + " 2 " + ANSI_RESET;
 
-    public static final String CARRIER = "Carrier";
-    public static final String BATTLESHIP = "Battleship";
-    public static final String CRUISER = "Cruiser";
-    public static final String SUBMARINE = "Submarine";
-    public static final String DESTROYER = "Destroyer";
+    public static final String SUBMARINE = ANSI_YELLOW + " S U B M A R I N E" + ANSI_RESET;
+    public static final String SUBMARINE_NUM = DESTROYER_NUM + EMPTY + " 3 " + ANSI_RESET;
+
+    public static final String CRUISER = ANSI_YELLOW + " C R U I S E R" + ANSI_RESET;
+    public static final String CRUISER_NUM = SUBMARINE_NUM;
+
+    public static final String BATTLESHIP = ANSI_YELLOW + " B A T T L E S H I P" + ANSI_RESET;
+    public static final String BATTLESHIP_NUM = CRUISER_NUM + EMPTY + " 4 " + ANSI_RESET;
+
+    public static final String CARRIER = ANSI_YELLOW + " C A R R I E R" + ANSI_RESET;
+    public static final String CARRIER_NUM = BATTLESHIP_NUM + EMPTY + " 5 " + ANSI_RESET;
     // TODO: 24/10/2019 PODIUM, POINTS,...
 
 
