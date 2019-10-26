@@ -4,7 +4,6 @@ import org.academiadecodigo.whiledlings.map.MapHandler;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Game {
     private static final int MAX_PLAYERS = 2;
@@ -42,9 +41,10 @@ public class Game {
         }
 
         //send the maps to be filled
-        Thread thread = new Thread(new MapSetup(players.get(0),maps.get(0)));
-        MapSetup mapSetup = new MapSetup(players.get(1), maps.get(1));
-        thread.start();
+        Thread mapSetup1 = new Thread(new MapSetup(players.get(0),maps.get(0)));
+        MapSetup mapSetup2 = new MapSetup(players.get(1), maps.get(1));
+        mapSetup1.start();
+        mapSetup2.run();
         //wait for the filled maps
         //ask player1 to play
         //check if he has got it, if yes, ask again
@@ -63,7 +63,8 @@ public class Game {
 
         @Override
         public void run() {
-            //print initial map
+            //build initial map
+            player.send(MapHandler.build(map));
             //ask for boat 1 initpos
             //ask for boat 1 final pos, keep doing this for every boat
         }

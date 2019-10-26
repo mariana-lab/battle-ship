@@ -1,7 +1,5 @@
 package org.academiadecodigo.whiledlings.map;
 
-import org.academiadecodigo.whiledlings.message.Message;
-
 import static org.academiadecodigo.whiledlings.map.Color.*;
 import static org.academiadecodigo.whiledlings.message.Message.*;
 
@@ -27,29 +25,31 @@ public class MapHandler {
         String[][] map = getNewMap();
         paintCell(map, "B", "4", PlayType.MARK.symbol);
         paintCell(map, "C", "4", PlayType.MISS.symbol);
-        print(map, map);
-        print(map);
-        printInitial(map);
+        System.out.println(build(map, map));
+        System.out.println(buildInitial(map));
+        System.out.println(buildInitial(map));
     }
 
-    private static void printInitial(String[][] map) {
-        System.out.print(PADDING);
+    private static String buildInitial(String[][] map) {
+        StringBuilder initialMapBuilder = new StringBuilder();
+        initialMapBuilder.append(PADDING);
 
         //LETTERS
-        printLetters(map[0].length);
-        System.out.print(ASK_IN_POSITION_OF_SHIP);
-        System.out.print("\n");
+        initialMapBuilder.append(buildLetters(map[0].length));
+        initialMapBuilder.append(ASK_IN_POSITION_OF_SHIP);
+        initialMapBuilder.append("\n");
 
 
         for (int row = 0; row < map.length; row++) {
-            printRow(map, row);
-            System.out.print(SPACE_BETWEEN_MAPS);
+            initialMapBuilder.append(buildRow(map, row));
+            initialMapBuilder.append(SPACE_BETWEEN_MAPS);
             //every other line
             if (row % 2 != 0)
-                System.out.print(boatStrings[row] + boatStrings[row - 1]);
-            System.out.print("\n");
+                initialMapBuilder.append(boatStrings[row] + boatStrings[row - 1]);
+            initialMapBuilder.append("\n");
 
         }
+        return initialMapBuilder.toString();
     }
 
 
@@ -65,67 +65,70 @@ public class MapHandler {
         return map;
     }
 
-    public static void print(String[][] map1, String[][] map2) {
-
-        System.out.print(PADDING);
+    public static String build(String[][] map1, String[][] map2) {
+        StringBuilder mapsBuilder = new StringBuilder();
+        mapsBuilder.append(PADDING);
 
         //LETTERS
-        printLetters(map1[0].length);
-        System.out.print(SPACE_BETWEEN_CELLS + SPACE_BETWEEN_CELLS);
-        printLetters(map2[0].length);
-        System.out.print("\n");
+        mapsBuilder.append(buildLetters(map1[0].length));
+        mapsBuilder.append(SPACE_BETWEEN_CELLS + SPACE_BETWEEN_CELLS);
+        mapsBuilder.append(buildLetters(map2[0].length));
+        mapsBuilder.append("\n");
 
 
         for (int row = 0; row < map1.length; row++) {
-            printRow(map1, row);
-            System.out.print(SPACE_BETWEEN_MAPS);
-            printRow(map2, row);
-            System.out.print("\n");
+            mapsBuilder.append(buildRow(map1, row));
+            mapsBuilder.append(SPACE_BETWEEN_MAPS);
+            mapsBuilder.append(buildRow(map2, row));
+            mapsBuilder.append("\n");
 
         }
 
-
+        return mapsBuilder.toString();
     }
 
-    private static void printRow(String[][] map, int row) {
+    private static String buildRow(String[][] map, int row) {
+        StringBuilder rowBuilder = new StringBuilder();
         //NUMBER checking if single digit or double digit
-        System.out.print((row + 1) + ((row == 9) ? "" : SPACE_BETWEEN_CELLS));
+        rowBuilder.append((row + 1) + ((row == 9) ? "" : SPACE_BETWEEN_CELLS));
 
         //CELLS of row
         for (int col = 0; col < map[row].length; col++) {
-            System.out.print(ANSI_BLUE_BACKGROUND);
-            System.out.print(SPACE_BETWEEN_CELLS);
+            rowBuilder.append(ANSI_BLUE_BACKGROUND);
+            rowBuilder.append(SPACE_BETWEEN_CELLS);
 
             String color = (map[col][row].equals(" ")) ? ANSI_BLUE_BACKGROUND : ANSI_RED_BACKGROUND;
-            System.out.print(color);
-            System.out.print(LEFT_WALL + map[col][row] + color + RIGHT_WALL);
+            rowBuilder.append(color);
+            rowBuilder.append(LEFT_WALL + map[col][row] + color + RIGHT_WALL);
         }
 
-        System.out.print(ANSI_RESET);
+        rowBuilder.append(ANSI_RESET);
+        return rowBuilder.toString();
     }
 
-    private static void printLetters(int cols) {
-
+    private static String buildLetters(int cols) {
+        StringBuilder lettersBuilder = new StringBuilder();
         for (int i = 0; i < cols; i++) {
-            System.out.print(EMPTY_CELL + letters[i] + EMPTY_CELL + SPACE_BETWEEN_CELLS);
+            lettersBuilder.append(EMPTY_CELL + letters[i] + EMPTY_CELL + SPACE_BETWEEN_CELLS);
         }
-        System.out.print(SPACE_BETWEEN_MAPS);
+        lettersBuilder.append(SPACE_BETWEEN_MAPS);
+        return lettersBuilder.toString();
     }
 
-    public static void print(String[][] map) {
-
-        System.out.print("\n" + PADDING);
+    public static String build(String[][] map) {
+        StringBuilder mapBuilder = new StringBuilder();
+        mapBuilder.append("\n" + PADDING);
         //LETTERS
-        printLetters(map[0].length);
-        System.out.print("\n");
+        mapBuilder.append(buildLetters(map[0].length));
+        mapBuilder.append("\n");
 
         for (int row = 0; row < map.length; row++) {
-            printRow(map, row);
-            System.out.print(SPACE_BETWEEN_MAPS);
-            System.out.print("\n");
+            mapBuilder.append(buildRow(map, row));
+            mapBuilder.append(SPACE_BETWEEN_MAPS);
+            mapBuilder.append("\n");
         }
 
-
+        return mapBuilder.toString();
     }
 
     public static void paintCell(String[][] map, String letter, String row, String symbol) {
