@@ -21,19 +21,19 @@ public class Message {
 
     public static final String EMPTY = ANSI_RESET + " " + ANSI_YELLOW_BACKGROUND;
     public static final String DESTROYER = ANSI_YELLOW + " D E S T R O Y E R";
-    public static final String DESTROYER_NUM = EMPTY + " 1 " + EMPTY + " 2 " + ANSI_RESET;
+    public static final String DESTROYER_NUM = EMPTY + ANSI_BLACK +  " 1 " + EMPTY + ANSI_BLACK + " 2 " + ANSI_RESET;
 
     public static final String SUBMARINE = ANSI_YELLOW + " S U B M A R I N E" + ANSI_RESET;
-    public static final String SUBMARINE_NUM = DESTROYER_NUM + EMPTY + " 3 " + ANSI_RESET;
+    public static final String SUBMARINE_NUM = DESTROYER_NUM + EMPTY + ANSI_BLACK + " 3 " + ANSI_RESET;
 
     public static final String CRUISER = ANSI_YELLOW + " C R U I S E R" + ANSI_RESET;
     public static final String CRUISER_NUM = SUBMARINE_NUM;
 
     public static final String BATTLESHIP = ANSI_YELLOW + " B A T T L E S H I P" + ANSI_RESET;
-    public static final String BATTLESHIP_NUM = CRUISER_NUM + EMPTY + " 4 " + ANSI_RESET;
+    public static final String BATTLESHIP_NUM = CRUISER_NUM + EMPTY + ANSI_BLACK + " 4 " + ANSI_RESET;
 
     public static final String CARRIER = ANSI_YELLOW + " C A R R I E R" + ANSI_RESET;
-    public static final String CARRIER_NUM = BATTLESHIP_NUM + EMPTY + " 5 " + ANSI_RESET;
+    public static final String CARRIER_NUM = BATTLESHIP_NUM + EMPTY + ANSI_BLACK + " 5 " + ANSI_RESET;
     // TODO: 24/10/2019 PODIUM, POINTS,...
 
 
