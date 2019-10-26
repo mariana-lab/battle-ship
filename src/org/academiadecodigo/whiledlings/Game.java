@@ -30,12 +30,14 @@ public class Game {
             if(!isFull()){
                 players.add(player);
                 maps.add(MapHandler.getNewMap());
+                System.out.println(player.getUsername() + "has been added to game");
                 return;
             }
         }
     }
 
     public void start(){
+        System.out.println("game has started");
         if (hasStarted){
             return;
         }

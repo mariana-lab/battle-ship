@@ -81,14 +81,23 @@ public class Server {
     }
 
     public void addPlayerToGame(Player player) {
-        for (Game game: games) {
+        System.out.println("trying to add i guess");
+        for ( final Game game: games) {
             if(game.isFull()){
                 continue;
             }
             game.addPlayer(player);
+            //only adds on a game that already has a player so it can now start :)
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    game.start();
+                }
+            });
         }
         // TODO: 26/10/2019 give random awsome names to the rooms
         games.add(new Game(player));
+
     }
 
 
