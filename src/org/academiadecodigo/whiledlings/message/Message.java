@@ -8,6 +8,7 @@ public class Message {
     public static final String GENERAL_ROOM = "You are at a general room and can talk with everyone";
     // TODO: 24/10/2019 possible commands
     public static final String HELP = "here you go. The possible commands";
+    public static final String PM_HELP = "Type /name message to send a pm";
     public static final String ASK_NAME = "Please insert an username:";
     public static final String ASK_COLOR = "Please select the number of a color";
     public static final String[] COLOR_OPTIONS = {ANSI_BLUE + "BLUE" + ANSI_RESET, ANSI_GREEN + "GREEN" + ANSI_RESET, ANSI_YELLOW + "YELLOW" + ANSI_RESET, ANSI_RED + "RED" + ANSI_RESET, ANSI_WHITE + "WHITE" + ANSI_RESET};

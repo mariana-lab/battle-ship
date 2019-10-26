@@ -4,7 +4,9 @@ import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.academiadecodigo.whiledlings.Player;
+import org.academiadecodigo.whiledlings.command.Command;
 import org.academiadecodigo.whiledlings.map.Color;
+import org.academiadecodigo.whiledlings.server.Server;
 
 import java.io.*;
 import java.net.Socket;
@@ -13,20 +15,17 @@ import static org.academiadecodigo.whiledlings.message.Message.*;
 
 public class ConnectionHandler implements Runnable {
 
-    private final BattleShipServer server;
+    private final Server server;
     private final Socket socket;
 
     private final Prompt prompt;
     private BufferedReader input;
     private PrintWriter output;
-    private String name;
-    private String color;
-    private String username;
     private Player player;
 
-    public ConnectionHandler(BattleShipServer battleShipServer, Socket socket) throws IOException {
+    public ConnectionHandler(Server server, Socket socket) throws IOException {
 
-        this.server = battleShipServer;
+        this.server = server;
         this.socket = socket;
         this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -41,30 +40,22 @@ public class ConnectionHandler implements Runnable {
         player = setUpPlayer();
         server.addPlayer(player);
 
-        while (true){
+        while (true) {
             try {
                 String str = input.readLine();
-                if(!str.startsWith("/")){
-                    server.broadcast(player.getUsername() + ": " + str);
-                    continue;
-                }
-                if(!Command.exists(str)){
-                    send(COMMAND_NOT_FOUND_ERROR);
-                }
+                Command.getCommand(str).getCommandHandler().handle(server, this, str);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        // TODO: 24/10/2019  welcome to the general room
-        // TODO: 24/10/2019  new thread to listen
-        // TODO: 24/10/2019  anything writen is broadcasted to waiting clients
 
 
     }
 
     private Player setUpPlayer() {
-        return new Player( askName() , askColor() ,this, prompt);
+        return new Player(askName(), askColor(), this, prompt);
     }
 
     private String askColor() {
@@ -83,7 +74,7 @@ public class ConnectionHandler implements Runnable {
         nameQuest.setError(NAME_EMPTY_ERROR);
         String name = prompt.getUserInput(nameQuest);
 
-        if (server.hasClient(name)) {
+        if (server.hasPlayer(name)) {
             send(NAME_EXISTS_ERROR);
             return askName();
         }
@@ -91,16 +82,13 @@ public class ConnectionHandler implements Runnable {
         return name;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void send(String s){
+    public void send(String s) {
         output.println(s);
         output.flush();
+    }
+
+    public String getUsername() {
+        return player.getUsername();
     }
 }

@@ -1,6 +1,6 @@
 package org.academiadecodigo.whiledlings;
 
-public class Room {
+public class Game {
     private String player1;
     private String player2;
 
