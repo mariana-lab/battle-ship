@@ -95,19 +95,19 @@ public class Game {
 
         private void askPosition(BoatType boatType) {
             StringSetInputScanner positionQuestion = new StringSetInputScanner(MapHandler.positions);
+            positionQuestion.setMessage(Message.ASK_POSITION + boatType.getName());
             positionQuestion.setError(Message.INVALID_CELL_ERROR);
             player.send(MapHandler.buildInitial(map));
-            positionQuestion.setMessage(Message.ASK_POSITION);
             String position = player.ask(positionQuestion);
             this.letter = position.split("")[0];
             this.number = position.split("")[1];
 
 
             MenuInputScanner directionMenu = new MenuInputScanner(new String[]{"Horizontal", "Vertical"});
+            directionMenu.setMessage(Message.ASK_DIRECTION + boatType.getName());
             directionMenu.setError(Message.INVALID_MENU_ERROR);
 
             player.send(MapHandler.buildInitial(map));
-            directionMenu.setMessage(Message.ASK_DIRECTION + boatType.getName());
             this.direction = Direction.values()[player.ask(directionMenu) - 1];
 
             if (MapHandler.canMark(map, letter, number, direction, boatType)) {

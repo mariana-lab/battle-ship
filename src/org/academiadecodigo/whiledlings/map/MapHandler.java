@@ -27,7 +27,7 @@ public class MapHandler {
         Set<String> positions = new HashSet<>();
         for (String letter : letters) {
             for (int i = 1; i <= CELL_NUMBER; i++) {
-                positions.add(letter+i);
+                positions.add(letter + i);
             }
         }
         return positions;
@@ -174,7 +174,7 @@ public class MapHandler {
         }
 
         //was marked
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size - 1; i++) {
             row += direction.equals(Direction.VERTICAL) ? i : 0;
             col += direction.equals(Direction.HORIZONTAL) ? i : 0;
 
@@ -196,7 +196,7 @@ public class MapHandler {
             row += direction.equals(Direction.VERTICAL) ? i : 0;
             col += direction.equals(Direction.HORIZONTAL) ? i : 0;
 
-            paintCell(map,col,row,symbol);
+            paintCell(map, col, row, symbol);
         }
     }
 
