@@ -16,8 +16,6 @@ public class Message {
 
     public static final String FINDING_GAME = "Finding a game where you can sink ships...";
 
-    public static final String ASK_IN_POSITION_OF_SHIP = ANSI_YELLOW + "Please select the initial position of " + ANSI_RESET;
-    public static final String ASK_FIN_POSITION_OF_SHIP = "Please select the final position <LETTER><NUM> of ";
 
     public static final String EMPTY = ANSI_RESET + " " + ANSI_YELLOW_BACKGROUND;
     public static final String DESTROYER = ANSI_YELLOW + " D E S T R O Y E R";
@@ -40,4 +38,12 @@ public class Message {
     public static final String NAME_EXISTS_ERROR = ANSI_RED + "This username already exists" + ANSI_RESET;
     public static final String NAME_EMPTY_ERROR = ANSI_RED + "You can't have an empty username" + ANSI_RESET;
     public static final String COMMAND_NOT_FOUND_ERROR = ANSI_RED + "This command has not been found, try /help for available commands" + ANSI_RESET;
+
+    //GAME QUESTIONS
+    public static final String ASK_DIRECTION = "Chose the direction of the ";
+    public static final String ASK_POSITION = ANSI_YELLOW + "Please select the initial position of " + ANSI_RESET;
+
+    public static final String INVALID_CELL_ERROR = ANSI_RED + "Please insert a valid position, like A2" + ANSI_RESET;
+    public static final String MARKED_POSITION_ERROR = ANSI_RED + "Out of limits or overlapping boats" + ANSI_RESET;
+    public static final String INVALID_MENU_ERROR = ANSI_RED + "Please select one of the options";
 }

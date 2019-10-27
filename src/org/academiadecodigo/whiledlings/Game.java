@@ -1,5 +1,11 @@
 package org.academiadecodigo.whiledlings;
+
+import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
+import org.academiadecodigo.bootcamp.scanners.string.StringSetInputScanner;
+import org.academiadecodigo.whiledlings.map.BoatType;
+import org.academiadecodigo.whiledlings.map.Direction;
 import org.academiadecodigo.whiledlings.map.MapHandler;
+import org.academiadecodigo.whiledlings.message.Message;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -23,27 +29,28 @@ public class Game {
     }
 
     public boolean isFull() {
-        return players.size()>= MAX_PLAYERS;
+        return players.size() >= MAX_PLAYERS;
     }
 
     public void addPlayer(Player player) {
         synchronized (players) {
-            if(!isFull()){
+            if (!isFull()) {
                 players.add(player);
                 maps.add(MapHandler.getNewMap());
                 System.out.println(player.getUsername() + " has been added to game");
+                System.out.println(players.size());
                 return;
             }
         }
     }
 
-    public void start(){
-        if (hasStarted){
+    public void start() {
+        if (hasStarted) {
             return;
         }
 
         //send the maps to be filled
-        Thread mapSetup1 = new Thread(new MapSetup(players.get(0),maps.get(0)));
+        Thread mapSetup1 = new Thread(new MapSetup(players.get(0), maps.get(0)));
         MapSetup mapSetup2 = new MapSetup(players.get(1), maps.get(1));
         mapSetup1.start();
         mapSetup2.run();
@@ -57,6 +64,9 @@ public class Game {
     private class MapSetup implements Runnable {
         private final Player player;
         private final String[][] map;
+        private String letter;
+        private String number;
+        private Direction direction;
 
         public MapSetup(Player player, String[][] map) {
             this.player = player;
@@ -67,8 +77,42 @@ public class Game {
         public void run() {
             //build initial map
             player.send(MapHandler.buildInitial(map));
-            //ask for boat 1 initpos
-            //ask for boat 1 final pos, keep doing this for every boat
+
+            markBoats();
+        }
+
+        private void markBoats() {
+
+            for (BoatType boatType : BoatType.values()) {
+
+                askPosition(boatType);
+
+                MapHandler.paintCells(map, letter, number, direction, boatType, MapHandler.MoveType.MARK.getSymbol());
+                player.send(MapHandler.buildInitial(map));
+
+            }
+        }
+
+        private void askPosition(BoatType boatType) {
+            StringSetInputScanner positionQuestion = new StringSetInputScanner(MapHandler.positions);
+            positionQuestion.setError(Message.INVALID_CELL_ERROR);
+            player.send(MapHandler.buildInitial(map));
+            positionQuestion.setMessage(Message.ASK_POSITION);
+            String position = player.ask(positionQuestion);
+            this.letter = position.split("")[0];
+            this.number = position.split("")[1];
+
+
+            MenuInputScanner directionMenu = new MenuInputScanner(new String[]{"Horizontal", "Vertical"});
+            directionMenu.setError(Message.INVALID_MENU_ERROR);
+
+            player.send(MapHandler.buildInitial(map));
+            directionMenu.setMessage(Message.ASK_DIRECTION + boatType.getName());
+            this.direction = Direction.values()[player.ask(directionMenu) - 1];
+
+            if (MapHandler.canMark(map, letter, number, direction, boatType)) {
+                askPosition(boatType);
+            }
         }
     }
 }

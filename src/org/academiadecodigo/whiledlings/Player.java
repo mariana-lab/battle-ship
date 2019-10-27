@@ -1,6 +1,8 @@
 package org.academiadecodigo.whiledlings;
 
 import org.academiadecodigo.bootcamp.Prompt;
+import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
+import org.academiadecodigo.bootcamp.scanners.string.StringSetInputScanner;
 import org.academiadecodigo.whiledlings.server.ConnectionHandler;
 
 import static org.academiadecodigo.whiledlings.map.Color.ANSI_RESET;
@@ -41,5 +43,12 @@ public class Player {
 
     public String getUsername() {
         return username;
+    }
+
+    public String ask(StringSetInputScanner question) {
+        return prompt.getUserInput(question);
+    }
+    public int ask(MenuInputScanner question) {
+        return prompt.getUserInput(question);
     }
 }

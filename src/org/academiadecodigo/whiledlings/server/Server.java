@@ -81,7 +81,6 @@ public class Server {
     }
 
     public void addPlayerToGame(Player player) {
-        System.out.println("trying to add i guess");
         for ( final Game game: games) {
             if(game.isFull()){
                 continue;
@@ -94,6 +93,7 @@ public class Server {
                     game.start();
                 }
             });
+            return;
         }
         // TODO: 26/10/2019 give random awsome names to the rooms
         games.add(new Game(player));

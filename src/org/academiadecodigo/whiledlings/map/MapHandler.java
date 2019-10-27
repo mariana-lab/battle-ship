@@ -1,5 +1,8 @@
 package org.academiadecodigo.whiledlings.map;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.academiadecodigo.whiledlings.map.Color.*;
 import static org.academiadecodigo.whiledlings.message.Message.*;
 
@@ -18,13 +21,23 @@ public class MapHandler {
 
     public static String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
     public static String[] boatStrings = {CARRIER, CARRIER_NUM, BATTLESHIP, BATTLESHIP_NUM, CRUISER, CRUISER_NUM, SUBMARINE, SUBMARINE_NUM, DESTROYER, DESTROYER_NUM};
+    public static Set<String> positions = generatePositions();
 
+    private static Set<String> generatePositions() {
+        Set<String> positions = new HashSet<>();
+        for (String letter : letters) {
+            for (int i = 1; i <= CELL_NUMBER; i++) {
+                positions.add(letter+i);
+            }
+        }
+        return positions;
+    }
 
     public static void main(String[] args) {
 
         String[][] map = getNewMap();
-        paintCell(map, "B", "4", PlayType.MARK.symbol);
-        paintCell(map, "C", "4", PlayType.MISS.symbol);
+        paintCell(map, 3, 3, MoveType.MARK.symbol);
+        paintCell(map, 4, 4, MoveType.MISS.symbol);
         System.out.println(build(map, map));
         System.out.println(buildInitial(map));
         System.out.println(buildInitial(map));
@@ -36,7 +49,7 @@ public class MapHandler {
 
         //LETTERS
         initialMapBuilder.append(buildLetters(map[0].length));
-        initialMapBuilder.append(ASK_IN_POSITION_OF_SHIP);
+        initialMapBuilder.append(ASK_POSITION);
         initialMapBuilder.append("\n");
 
 
@@ -131,8 +144,8 @@ public class MapHandler {
         return mapBuilder.toString();
     }
 
-    public static void paintCell(String[][] map, String letter, String row, String symbol) {
-        map[getColFromLetter(letter)][Integer.parseInt(row)] = symbol;
+    public static void paintCell(String[][] map, int col, int row, String symbol) {
+        map[col][row] = symbol;
     }
 
     public static int getColFromLetter(String l) {
@@ -150,15 +163,51 @@ public class MapHandler {
         return Integer.parseInt(n) - 1;
     }
 
+    public static boolean canMark(String[][] map, String letter, String number, Direction direction, BoatType boatType) {
+        int col = getColFromLetter(letter);
+        int row = getRowFromNumber(number);
+        int size = boatType.getSize();
 
-    public enum PlayType {
+        //out of limits
+        if ((direction.equals(Direction.VERTICAL) ? row : col) + size >= CELL_NUMBER) {
+            return false;
+        }
+
+        //was marked
+        for (int i = 0; i < size; i++) {
+            row += direction.equals(Direction.VERTICAL) ? i : 0;
+            col += direction.equals(Direction.HORIZONTAL) ? i : 0;
+
+            if (!map[col][row].equals(EMPTY_CELL)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void paintCells(String[][] map, String letter, String number, Direction direction, BoatType boatType, String symbol) {
+        int col = getColFromLetter(letter);
+        int row = getRowFromNumber(number);
+        int size = boatType.getSize();
+
+
+        //was marked
+        for (int i = 0; i < size; i++) {
+            row += direction.equals(Direction.VERTICAL) ? i : 0;
+            col += direction.equals(Direction.HORIZONTAL) ? i : 0;
+
+            paintCell(map,col,row,symbol);
+        }
+    }
+
+    public enum MoveType {
         MARK("X"),
         HIT("H"),
         MISS("M");
 
         private final String symbol;
 
-        PlayType(String symbol) {
+        MoveType(String symbol) {
             this.symbol = symbol;
         }
 
