@@ -41,9 +41,10 @@ public class Message {
 
     //GAME QUESTIONS
     public static final String ASK_DIRECTION = "Chose the direction of the ";
-    public static final String ASK_POSITION = ANSI_YELLOW + "Please select the initial position of " + ANSI_RESET;
+    public static final String ASK_POSITION = ANSI_YELLOW + "Select the initial position for "+ ANSI_RESET;
+    public static final String MAP_SETUP_INTRO = ANSI_YELLOW + "Horizontal will select for the right, and the vertical for down " + ANSI_RESET;
 
     public static final String INVALID_CELL_ERROR = ANSI_RED + "Please insert a valid position, like A2" + ANSI_RESET;
     public static final String MARKED_POSITION_ERROR = ANSI_RED + "Out of limits or overlapping boats" + ANSI_RESET;
-    public static final String INVALID_MENU_ERROR = ANSI_RED + "Please select one of the options";
+    public static final String INVALID_MENU_ERROR = ANSI_RED + "Please select one of the options" + ANSI_RESET;
 }

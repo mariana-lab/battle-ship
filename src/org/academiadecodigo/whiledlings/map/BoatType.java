@@ -34,15 +34,15 @@ public enum BoatType {
         return cellsNums;
     }
 
-    public static MapInfoList getInitialBoatsInfo(BoatType type){
-        MapInfoList mapInfoList = new MapInfoList(MapHandler.CELL_NUMBER + 1, ASK_POSITION + type.name);
-        for (int row = 1; row <= mapInfoList.size(); row++) {
+    public static MapInfoList getInitialBoatsInfo(BoatType type, String header) {
 
+        MapInfoList mapInfoList = new MapInfoList(MapHandler.CELL_NUMBER + 1, header);
+
+        for (int row = 0; row < mapInfoList.size()-1; row++) {
             //every other line
-            if (row % 2 != 0) { // row <list.size
-                //linkedList.get(10);
-                mapInfoList.add(BoatType.values()[row / 2].getCellsNums());
-                mapInfoList.add(BoatType.values()[row / 2].getName());
+            if (row % 2 == 0) {
+                mapInfoList.add(BoatType.values()[row / 2].getCellsNums() + BoatType.values()[row / 2].getName());
+                mapInfoList.add("");
             }
         }
         return mapInfoList;

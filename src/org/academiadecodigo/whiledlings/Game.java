@@ -64,12 +64,20 @@ public class Game {
         //ask player 2 to guess, "
     }
 
+    public Player getOponent(Player player){
+        for (Player p : players) {
+            if(!p.equals(player)){
+                return p;
+            }
+        }
+        return player;
+    }
+
 
     private class MapSetup implements Runnable {
         private final Player player;
         private final String[][] map;
-        private String position;
-        private Direction direction;
+
 
         public MapSetup(Player player, String[][] map) {
             this.player = player;
@@ -86,32 +94,35 @@ public class Game {
 
             for (BoatType boatType : BoatType.values()) {
 
-                askPosition(boatType);
-                Boat boat = new Boat(position, direction, boatType, MapHandler.MoveType.MARK.getSymbol());
-                MapHandler.paintCells(map, boat);
-                player.send(MapHandler.buildInitial(map, BoatType.getInitialBoatsInfo(boatType)));
+                Boat boat = askBoatPosition(boatType);
+                MapHandler.paintBoat(map, boat);
 
+                System.out.println(MapHandler.buildInitial(map, BoatType.getInitialBoatsInfo(boatType, ASK_POSITION + boatType.getName())));
+                player.send(MapHandler.buildInitial(map, BoatType.getInitialBoatsInfo(boatType, ASK_POSITION + boatType.getName())));
             }
+            player.send("You've completed your strategy, now it's time we wait for " + getOponent(player).getUsername());
         }
 
-        private void askPosition(BoatType boatType) {
+        private Boat askBoatPosition(BoatType boatType) {
 
-
-            StringSetInputScanner positionQuestion = QuestionHandler.buildQuestion(ASK_POSITION, INVALID_CELL_ERROR, MapHandler.positions);
+            StringSetInputScanner positionQuestion = QuestionHandler.buildQuestion(ASK_POSITION + boatType.getName() + "\n", INVALID_CELL_ERROR, MapHandler.positions);
             MenuInputScanner directionQuestion = QuestionHandler.buildQuestion(ASK_DIRECTION + boatType.getName(), INVALID_MENU_ERROR, Direction.getAll());
 
+            //initial position of boat
             player.send(MapHandler.buildInitial(map, boatType));
-            this.position = player.ask(positionQuestion);
+            String position = player.ask(positionQuestion);
 
-            player.send(MapHandler.buildInitial(map, boatType));
+            //direction of boat
             int directionInt = player.ask(directionQuestion);
-            this.direction = Direction.values()[directionInt - 1];
+            Direction direction = Direction.values()[directionInt - 1];
 
+            //verification of limits and other boats
             if (!MapHandler.canMark(map, position, direction, boatType)) {
-                askPosition(boatType);
-                return;
+                player.send(MARKED_POSITION_ERROR);
+                return askBoatPosition(boatType);
             }
 
+            return new Boat(position, direction, boatType, MapHandler.MoveType.MARK.getSymbol());
         }
     }
 }

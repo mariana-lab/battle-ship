@@ -31,7 +31,7 @@ public class MapInfoList implements Iterable<String> {
     public String[] toArray() {
         String[] strings = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            strings[i] = list.get(0);
+            strings[i] = list.get(i);
         }
         return strings;
     }
@@ -43,7 +43,7 @@ public class MapInfoList implements Iterable<String> {
 
     public void setHeader(String s){
         list.remove(0);
-        list.add(s);
+        list.add(0, s);
     }
     @Override
     public Iterator<String> iterator() {

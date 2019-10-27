@@ -1,7 +1,6 @@
 package org.academiadecodigo.whiledlings.map;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 import static org.academiadecodigo.whiledlings.map.Color.*;
@@ -28,6 +27,7 @@ public class MapHandler {
         for (String letter : letters) {
             for (int i = 1; i <= CELL_NUMBER; i++) {
                 positions.add(letter + i);
+                positions.add(letter.toLowerCase() + i);
             }
         }
         return positions;
@@ -38,18 +38,19 @@ public class MapHandler {
         String[][] map = getNewMap();
         //paintCell(map, 3, 3, MoveType.MARK.symbol);
         //paintCell(map, 4, 4, MoveType.MISS.symbol);
-        System.out.println(buildInitial(map, BoatType.BATTLESHIP));
-        System.out.println(buildInitial(map, BoatType.CRUISER));
+        System.out.println(buildInitial(map, BoatType.getInitialBoatsInfo(BoatType.CRUISER, ASK_POSITION)));
+        System.out.println(buildInitial(map, BoatType.getInitialBoatsInfo(BoatType.CRUISER, ASK_POSITION)));
         System.out.println(canMark(map, "C3", Direction.HORIZONTAL, BoatType.CRUISER));
-        paintCells(map, new Boat("C3", Direction.HORIZONTAL, BoatType.CRUISER, MoveType.MARK.getSymbol()));
+        paintBoat(map, new Boat("C3", Direction.HORIZONTAL, BoatType.CRUISER, MoveType.MARK.getSymbol()));
         System.out.println(build(map));
         System.out.println(build(map, map));
     }
 
     public static String buildInitial(String[][] map, MapInfoList infoList) {
-        StringBuilder initialMapBuilder = new StringBuilder();
-        initialMapBuilder.append(PADDING);
 
+        StringBuilder initialMapBuilder = new StringBuilder();
+
+        initialMapBuilder.append(PADDING);
         //LETTERS
         initialMapBuilder.append(buildLetters(map[0].length));
         initialMapBuilder.append(infoList.getHeader());
@@ -68,7 +69,7 @@ public class MapHandler {
 
     public static String buildInitial(String[][] map, BoatType boatType) {
         StringBuilder initialMapBuilder = new StringBuilder();
-        LinkedList<String> linkedList = new LinkedList<>();
+
         initialMapBuilder.append(PADDING);
 
         //LETTERS
@@ -189,22 +190,26 @@ public class MapHandler {
 
     public static boolean canMark(String[][] map, String position, Direction direction, BoatType boatType) {
         int col = getColFromLetter(position.split("")[0]);
-        int row = getRowFromNumber(position.split("")[1]);
+        int row = getRowFromNumber(position.substring(1));
         int size = boatType.getSize();
 
         //out of limits
-        if ((direction.equals(Direction.VERTICAL) ? row : col) + size >= CELL_NUMBER) {
+        if ((direction.equals(Direction.VERTICAL) ? row : col) + size - 1 >= CELL_NUMBER) {
+            System.out.println("Letter, col: " + col);
+            System.out.println("number, row: " + row);
+            System.out.println(col + size);
             return false;
         }
 
         //was marked
         for (int i = 0; i < size - 1; i++) {
-            row += direction.equals(Direction.VERTICAL) ? i : 0;
-            col += direction.equals(Direction.HORIZONTAL) ? i : 0;
 
             if (!map[col][row].equals(EMPTY_CELL)) {
+
                 return false;
             }
+            row += direction.equals(Direction.VERTICAL) ? 1 : 0;
+            col += direction.equals(Direction.HORIZONTAL) ? 1 : 0;
         }
         return true;
     }
@@ -213,19 +218,18 @@ public class MapHandler {
         map[col][row] = symbol;
     }
 
-    public static void paintCells(String[][] map, Boat boat) {
+    public static void paintBoat(String[][] map, Boat boat) {
 
         int col = getColFromLetter(boat.getPosition().split("")[0]);
-        int row = getRowFromNumber(boat.getPosition().split("")[1]);
+        int row = getRowFromNumber(boat.getPosition().substring(1));
         int size = boat.getBoatType().getSize();
 
 
         //was marked
         for (int i = 0; i < size; i++) {
+            paintCell(map, col, row, boat.getSymbol());
             row += boat.getDirection().equals(Direction.VERTICAL) ? 1 : 0;
             col += boat.getDirection().equals(Direction.HORIZONTAL) ? 1 : 0;
-            System.out.println("row: " + row + "\n" + "col :" + col);
-            paintCell(map, col, row, boat.getSymbol());
         }
     }
 
