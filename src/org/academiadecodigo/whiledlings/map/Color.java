@@ -24,9 +24,9 @@ public class Color {
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
-    public static final HashMap<String,String> userOprions = createUserOptions();
+    public static final HashMap<String,String> colorOptions = createColorOptions();
 
-    private static HashMap<String, String> createUserOptions() {
+    private static HashMap<String, String> createColorOptions() {
         HashMap<String,String> options = new HashMap<>();
         options.put(ANSI_PURPLE + "PURPLE" + ANSI_RESET, ANSI_PURPLE);
         options.put(ANSI_BLUE + "BLUE" + ANSI_RESET, ANSI_BLUE);

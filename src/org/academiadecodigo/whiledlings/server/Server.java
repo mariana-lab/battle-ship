@@ -93,13 +93,12 @@ public class Server {
                     game.start();
                 }
             });
-            System.out.println(Thread.currentThread().getName() + " will sleep!");
             wait();
             return;
         }
         // TODO: 26/10/2019 give random awsome names to the rooms
         games.add(new Game(player));
-        System.out.println(Thread.currentThread().getName() + " will sleep!");
+        //TODO wake up the threads when setupember ends
         wait();
     }
 

@@ -2,10 +2,14 @@ package org.academiadecodigo.whiledlings;
 
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringSetInputScanner;
+import org.academiadecodigo.whiledlings.map.Boat;
 import org.academiadecodigo.whiledlings.map.BoatType;
 import org.academiadecodigo.whiledlings.map.Direction;
 import org.academiadecodigo.whiledlings.map.MapHandler;
-import org.academiadecodigo.whiledlings.message.Message;
+
+import static org.academiadecodigo.whiledlings.message.Message.*;
+
+import org.academiadecodigo.whiledlings.message.QuestionHandler;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -64,8 +68,7 @@ public class Game {
     private class MapSetup implements Runnable {
         private final Player player;
         private final String[][] map;
-        private String letter;
-        private String number;
+        private String position;
         private Direction direction;
 
         public MapSetup(Player player, String[][] map) {
@@ -84,34 +87,31 @@ public class Game {
             for (BoatType boatType : BoatType.values()) {
 
                 askPosition(boatType);
-
-                MapHandler.paintCells(map, letter, number, direction, boatType, MapHandler.MoveType.MARK.getSymbol());
-                player.send(MapHandler.buildInitial(map));
+                Boat boat = new Boat(position, direction, boatType, MapHandler.MoveType.MARK.getSymbol());
+                MapHandler.paintCells(map, boat);
+                player.send(MapHandler.buildInitial(map, boatType));
 
             }
         }
 
         private void askPosition(BoatType boatType) {
-            StringSetInputScanner positionQuestion = new StringSetInputScanner(MapHandler.positions);
-            positionQuestion.setMessage(Message.ASK_POSITION + boatType.getName());
-            positionQuestion.setError(Message.INVALID_CELL_ERROR);
-            player.send(MapHandler.buildInitial(map));
-
-            String position = player.ask(positionQuestion);
-            this.letter = position.split("")[0];
-            this.number = position.split("")[1];
 
 
-            MenuInputScanner directionMenu = new MenuInputScanner(new String[]{"Horizontal", "Vertical"});
-            directionMenu.setMessage(Message.ASK_DIRECTION + boatType.getName());
-            directionMenu.setError(Message.INVALID_MENU_ERROR);
+            StringSetInputScanner positionQuestion = QuestionHandler.buildQuestion(ASK_POSITION, INVALID_CELL_ERROR, MapHandler.positions);
+            MenuInputScanner directionQuestion = QuestionHandler.buildQuestion(ASK_DIRECTION + boatType.getName(), INVALID_MENU_ERROR, Direction.getAll());
 
-            player.send(MapHandler.buildInitial(map));
-            this.direction = Direction.values()[player.ask(directionMenu) - 1];
+            player.send(MapHandler.buildInitial(map, boatType));
+            this.position = player.ask(positionQuestion);
 
-            if (MapHandler.canMark(map, letter, number, direction, boatType)) {
+            player.send(MapHandler.buildInitial(map, boatType));
+            int directionInt = player.ask(directionQuestion);
+            this.direction = Direction.values()[directionInt - 1];
+
+            if (!MapHandler.canMark(map, position, direction, boatType)) {
                 askPosition(boatType);
+                return;
             }
+
         }
     }
 }

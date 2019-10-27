@@ -7,13 +7,12 @@ import org.academiadecodigo.bootcamp.scanners.string.StringSetInputScanner;
 import org.academiadecodigo.whiledlings.Player;
 import org.academiadecodigo.whiledlings.command.Command;
 import org.academiadecodigo.whiledlings.map.Color;
+import static org.academiadecodigo.whiledlings.message.Message.*;
 import org.academiadecodigo.whiledlings.message.QuestionHandler;
-import org.academiadecodigo.whiledlings.server.Server;
 
 import java.io.*;
 import java.net.Socket;
 
-import static org.academiadecodigo.whiledlings.message.Message.*;
 
 public class ConnectionHandler implements Runnable {
 
@@ -43,7 +42,6 @@ public class ConnectionHandler implements Runnable {
         while (true) {
             try {
                 String str = input.readLine();
-                System.out.println(Thread.currentThread().getName() + " read: " + str);
                 Command.getCommand(str).getCommandHandler().handle(server, this, str);
 
             } catch (IOException e) {
@@ -60,11 +58,11 @@ public class ConnectionHandler implements Runnable {
 
     private String askColor() {
         //gets String[] with names of colors
-        String[] colors = Color.userOprions.keySet().toArray(new String[Color.userOprions.size()]);
+        String[] colors = Color.colorOptions.keySet().toArray(new String[Color.colorOptions.size()]);
         MenuInputScanner colorQuest = new MenuInputScanner(colors);
         int i = prompt.getUserInput(colorQuest);
         //returns the code of the color
-        return Color.userOprions.get(colors[i - 1]);
+        return Color.colorOptions.get(colors[i - 1]);
     }
 
     private String askName() {
@@ -94,10 +92,7 @@ public class ConnectionHandler implements Runnable {
     }
 
     public synchronized String ask(StringSetInputScanner question) {
-        System.out.println(Thread.currentThread().getName() + " asked a set question.");
-        String str = prompt.getUserInput(question);
-        System.out.println("and the answer to that question was read... " + str);
-        return str;
+        return prompt.getUserInput(question);
     }
 
     public synchronized String ask(StringInputScanner question) {
