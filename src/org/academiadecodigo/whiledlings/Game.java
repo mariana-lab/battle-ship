@@ -89,7 +89,7 @@ public class Game {
                 askPosition(boatType);
                 Boat boat = new Boat(position, direction, boatType, MapHandler.MoveType.MARK.getSymbol());
                 MapHandler.paintCells(map, boat);
-                player.send(MapHandler.buildInitial(map, boatType));
+                player.send(MapHandler.buildInitial(map, BoatType.getInitialBoatsInfo(boatType)));
 
             }
         }

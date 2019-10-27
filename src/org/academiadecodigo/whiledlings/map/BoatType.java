@@ -2,6 +2,8 @@ package org.academiadecodigo.whiledlings.map;
 
 import org.academiadecodigo.whiledlings.message.Message;
 
+import static org.academiadecodigo.whiledlings.message.Message.ASK_POSITION;
+
 
 public enum BoatType {
     CARRIER(Message.CARRIER, Message.CARRIER_NUM, 5),
@@ -30,5 +32,19 @@ public enum BoatType {
 
     public String getCellsNums() {
         return cellsNums;
+    }
+
+    public static MapInfoList getInitialBoatsInfo(BoatType type){
+        MapInfoList mapInfoList = new MapInfoList(MapHandler.CELL_NUMBER + 1, ASK_POSITION + type.name);
+        for (int row = 1; row <= mapInfoList.size(); row++) {
+
+            //every other line
+            if (row % 2 != 0) { // row <list.size
+                //linkedList.get(10);
+                mapInfoList.add(BoatType.values()[row / 2].getCellsNums());
+                mapInfoList.add(BoatType.values()[row / 2].getName());
+            }
+        }
+        return mapInfoList;
     }
 }

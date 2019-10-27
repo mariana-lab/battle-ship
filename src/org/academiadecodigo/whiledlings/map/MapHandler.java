@@ -46,6 +46,26 @@ public class MapHandler {
         System.out.println(build(map, map));
     }
 
+    public static String buildInitial(String[][] map, MapInfoList infoList) {
+        StringBuilder initialMapBuilder = new StringBuilder();
+        initialMapBuilder.append(PADDING);
+
+        //LETTERS
+        initialMapBuilder.append(buildLetters(map[0].length));
+        initialMapBuilder.append(infoList.getHeader());
+        initialMapBuilder.append("\n");
+
+
+        for (int row = 0; row < map.length; row++) {
+            initialMapBuilder.append(buildRow(map, row, false));
+            initialMapBuilder.append(SPACE_BETWEEN_MAPS);
+            initialMapBuilder.append(infoList.toArray()[row+1]);
+            initialMapBuilder.append("\n");
+
+        }
+        return initialMapBuilder.toString();
+    }
+
     public static String buildInitial(String[][] map, BoatType boatType) {
         StringBuilder initialMapBuilder = new StringBuilder();
         LinkedList<String> linkedList = new LinkedList<>();
@@ -224,7 +244,7 @@ public class MapHandler {
         }
 
         public static String getColor(String symbol, boolean isEnemyMap) {
-            if(isEnemyMap && symbol.equals(MARK.symbol)){
+            if (isEnemyMap && symbol.equals(MARK.symbol)) {
                 return EMPTY.color;
             }
 
@@ -235,7 +255,6 @@ public class MapHandler {
             }
             return EMPTY.color;
         }
-
 
 
         public String getSymbol() {
