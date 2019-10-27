@@ -9,6 +9,10 @@ public class GameHandler implements CommandHandler {
     @Override
     public void handle(Server server, ConnectionHandler connection, String message) {
         connection.send(Message.FINDING_GAME);
-        server.addPlayerToGame(connection.getPlayer());
+        try {
+            server.addPlayerToGame(connection.getPlayer());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

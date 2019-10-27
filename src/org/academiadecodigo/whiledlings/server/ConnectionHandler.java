@@ -3,9 +3,11 @@ package org.academiadecodigo.whiledlings.server;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
+import org.academiadecodigo.bootcamp.scanners.string.StringSetInputScanner;
 import org.academiadecodigo.whiledlings.Player;
 import org.academiadecodigo.whiledlings.command.Command;
 import org.academiadecodigo.whiledlings.map.Color;
+import org.academiadecodigo.whiledlings.message.QuestionHandler;
 import org.academiadecodigo.whiledlings.server.Server;
 
 import java.io.*;
@@ -16,9 +18,8 @@ import static org.academiadecodigo.whiledlings.message.Message.*;
 public class ConnectionHandler implements Runnable {
 
     private final Server server;
-    private final Socket socket;
 
-    private final Prompt prompt;
+    private Prompt prompt;
     private BufferedReader input;
     private PrintWriter output;
     private Player player;
@@ -26,7 +27,6 @@ public class ConnectionHandler implements Runnable {
     public ConnectionHandler(Server server, Socket socket) throws IOException {
 
         this.server = server;
-        this.socket = socket;
         this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
         this.prompt = new Prompt(socket.getInputStream(), new PrintStream(socket.getOutputStream()));
@@ -43,13 +43,13 @@ public class ConnectionHandler implements Runnable {
         while (true) {
             try {
                 String str = input.readLine();
+                System.out.println(Thread.currentThread().getName() + " read: " + str);
                 Command.getCommand(str).getCommandHandler().handle(server, this, str);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
 
 
     }
@@ -69,10 +69,7 @@ public class ConnectionHandler implements Runnable {
 
     private String askName() {
 
-        StringInputScanner nameQuest = new StringInputScanner();
-        nameQuest.setMessage(ASK_NAME);
-        nameQuest.setError(NAME_EMPTY_ERROR);
-        String name = prompt.getUserInput(nameQuest);
+        String name = ask(QuestionHandler.buildQuestion(ASK_NAME, NAME_EMPTY_ERROR));
 
         if (server.hasPlayer(name)) {
             send(NAME_EXISTS_ERROR);
@@ -94,5 +91,16 @@ public class ConnectionHandler implements Runnable {
 
     public Player getPlayer() {
         return this.player;
+    }
+
+    public synchronized String ask(StringSetInputScanner question) {
+        System.out.println(Thread.currentThread().getName() + " asked a set question.");
+        String str = prompt.getUserInput(question);
+        System.out.println("and the answer to that question was read... " + str);
+        return str;
+    }
+
+    public synchronized String ask(StringInputScanner question) {
+        return prompt.getUserInput(question);
     }
 }

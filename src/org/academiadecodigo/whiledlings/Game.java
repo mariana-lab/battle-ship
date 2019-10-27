@@ -76,8 +76,6 @@ public class Game {
         @Override
         public void run() {
             //build initial map
-            player.send(MapHandler.buildInitial(map));
-
             markBoats();
         }
 
@@ -98,6 +96,7 @@ public class Game {
             positionQuestion.setMessage(Message.ASK_POSITION + boatType.getName());
             positionQuestion.setError(Message.INVALID_CELL_ERROR);
             player.send(MapHandler.buildInitial(map));
+
             String position = player.ask(positionQuestion);
             this.letter = position.split("")[0];
             this.number = position.split("")[1];

@@ -46,7 +46,7 @@ public class Player {
     }
 
     public String ask(StringSetInputScanner question) {
-        return prompt.getUserInput(question);
+        return connection.ask(question);
     }
     public int ask(MenuInputScanner question) {
         return prompt.getUserInput(question);

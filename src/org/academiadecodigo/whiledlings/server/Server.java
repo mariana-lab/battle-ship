@@ -80,7 +80,7 @@ public class Server {
         return list;
     }
 
-    public void addPlayerToGame(Player player) {
+    public synchronized void addPlayerToGame(Player player) throws InterruptedException {
         for ( final Game game: games) {
             if(game.isFull()){
                 continue;
@@ -93,11 +93,14 @@ public class Server {
                     game.start();
                 }
             });
+            System.out.println(Thread.currentThread().getName() + " will sleep!");
+            wait();
             return;
         }
         // TODO: 26/10/2019 give random awsome names to the rooms
         games.add(new Game(player));
-
+        System.out.println(Thread.currentThread().getName() + " will sleep!");
+        wait();
     }
 
 
