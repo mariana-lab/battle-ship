@@ -1,7 +1,7 @@
 package org.academiadecodigo.whiledlings.server;
 
 import org.academiadecodigo.whiledlings.Player;
-import org.academiadecodigo.whiledlings.Game;
+import org.academiadecodigo.whiledlings.Game.Game;
 
 import java.io.IOException;
 import java.net.ServerSocket;

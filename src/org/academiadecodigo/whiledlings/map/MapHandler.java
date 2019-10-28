@@ -195,9 +195,6 @@ public class MapHandler {
 
         //out of limits
         if ((direction.equals(Direction.VERTICAL) ? row : col) + size - 1 >= CELL_NUMBER) {
-            System.out.println("Letter, col: " + col);
-            System.out.println("number, row: " + row);
-            System.out.println(col + size);
             return false;
         }
 
