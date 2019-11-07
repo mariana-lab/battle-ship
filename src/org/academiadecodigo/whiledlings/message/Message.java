@@ -19,7 +19,7 @@ public class Message {
 
     public static final String EMPTY = ANSI_RESET + " " + ANSI_YELLOW_BACKGROUND;
     public static final String DESTROYER = ANSI_YELLOW + " D E S T R O Y E R" + ANSI_RESET;
-    public static final String DESTROYER_NUM = EMPTY + ANSI_BLACK +  " 1 " + EMPTY + ANSI_BLACK + " 2 " + ANSI_RESET;
+    public static final String DESTROYER_NUM = EMPTY + ANSI_BLACK + " 1 " + EMPTY + ANSI_BLACK + " 2 " + ANSI_RESET;
 
     public static final String SUBMARINE = ANSI_YELLOW + " S U B M A R I N E" + ANSI_RESET;
     public static final String SUBMARINE_NUM = DESTROYER_NUM + EMPTY + ANSI_BLACK + " 3 " + ANSI_RESET;
@@ -40,22 +40,30 @@ public class Message {
     public static final String COMMAND_NOT_FOUND_ERROR = ANSI_RED + "This command has not been found, try /help for available commands" + ANSI_RESET;
 
     //GAME STAGES
-    public static final String GAME_WELCOME = ANSI_BLUE + "WELCOME MARINE!!" + ANSI_RESET;
-    public static final String GAME_INFO = ANSI_BLUE + "Tthe game will start as soon as another player joins! :)\n" + ANSI_RESET;
-    public static final String OPONENT_ARRIVAL = ANSI_BLUE + "has arrived for the battle!" + ANSI_RESET;
+    public static final String GAME_WELCOME = ANSI_BLUE + "WELCOME MARINE " + ANSI_RESET;
+    public static final String GAME_INFO = ANSI_BLUE + "The game will start as soon as another player joins! :)\n" + ANSI_RESET;
+    public static final String OPONENT_ARRIVAL = ANSI_BLUE + " has arrived for the battle!" + ANSI_RESET;
 
-    public static final String SETUP_INITIAL = ANSI_BLUE + "Ok, let's start to setup your map" + ANSI_RESET;
+    public static final String SETUP_INITIAL = ANSI_BLUE + "Ok, let's start to setup your map... Think wisely!" + ANSI_RESET;
     public static final String SETUP_FINAL = ANSI_BLUE + "Choices have been made, let's throw our cannon balls!" + ANSI_RESET;
     public static final String ROUNDS_INITIAL = ANSI_BLUE + "Round has started." + ANSI_RESET;
     public static final String ROUNDS_FINAL = ANSI_BLUE + "AMAZING GAME" + ANSI_RESET;
     public static final String FINAL_INITIAL = ANSI_BLUE + "Final stage!" + ANSI_RESET;
     public static final String FINAL_FINAL = ANSI_BLUE + "Presenting the stats..." + ANSI_RESET;
 
-    //GAME QUESTIONS
-    public static final String ASK_DIRECTION = ANSI_YELLOW + "Chose the direction of the " + ANSI_RESET;
-    public static final String ASK_POSITION = ANSI_YELLOW + "Select the initial position for "+ ANSI_RESET;
+    //SETUP
+    public static final String ASK_BOAT_DIRECTION = ANSI_YELLOW + "Chose the direction of the " + ANSI_RESET;
+    public static final String ASK_BOAT_POSITION = ANSI_YELLOW + "Select the initial position for " + ANSI_RESET;
     public static final String MAP_SETUP_INTRO = ANSI_YELLOW + "Horizontal will select for the right, and the vertical for down" + ANSI_RESET;
     public static final String COMPLETION_MAP = ANSI_YELLOW + "You've completed your strategy, now it's time we wait for " + ANSI_RESET;
+
+    //ROUNDS
+    public static final String ROUNDS_START = ANSI_BLUE + "WHOOOF Here we go! Let the BATTLE BEGIN" + ANSI_RESET;
+    public static final String ASK_HIT_POSITION = ANSI_BLUE + "Where do you want to hit?\n" + ANSI_RESET;
+    public static final String REPEATED_POSITION_ERROR = ANSI_RED + "You've tried that location before!!" + ANSI_RESET;
+    public static final String MISS = ANSI_BLUE + "You MISS!!!" + ANSI_RESET;
+    public static final String HIT = ANSI_RED + "You HIT!!!!" + ANSI_RESET;
+
 
     public static final String INVALID_CELL_ERROR = ANSI_RED + "Please insert a valid position, like A2" + ANSI_RESET;
     public static final String MARKED_POSITION_ERROR = ANSI_RED + "Out of limits or overlapping boats" + ANSI_RESET;

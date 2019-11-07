@@ -2,8 +2,6 @@ package org.academiadecodigo.whiledlings.map;
 
 import org.academiadecodigo.whiledlings.message.Message;
 
-import static org.academiadecodigo.whiledlings.message.Message.ASK_POSITION;
-
 
 public enum BoatType {
     CARRIER(Message.CARRIER, Message.CARRIER_NUM, 5),
@@ -15,11 +13,24 @@ public enum BoatType {
     private String name;
     private String cellsNums;
     private int size;
+    private static int maxHits = countMaxHits();
 
     BoatType(String name, String cellsNums, int size) {
         this.name = name;
         this.cellsNums = cellsNums;
         this.size = size;
+    }
+
+    private static int countMaxHits() {
+        int count = 0;
+        for (BoatType type : values()) {
+            count += type.size;
+        }
+        return count;
+    }
+
+    public static int getMaxHits() {
+        return maxHits;
     }
 
     public String getName() {

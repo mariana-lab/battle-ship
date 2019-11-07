@@ -15,6 +15,7 @@ public class Player {
     private final ConnectionHandler connection;
     private final Prompt prompt;
     private boolean playing;
+    private String[][] map;
 
     public Player(String name, String color, ConnectionHandler connection, Prompt prompt) {
         this.name = name;
@@ -50,5 +51,13 @@ public class Player {
     }
     public int ask(MenuInputScanner question) {
         return prompt.getUserInput(question);
+    }
+
+    public String[][] getMap() {
+        return this.map;
+    }
+
+    public void setMap(String[][] map) {
+        this.map = map;
     }
 }

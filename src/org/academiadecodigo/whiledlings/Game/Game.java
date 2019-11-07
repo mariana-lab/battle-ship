@@ -17,16 +17,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Game {
+
     private static final int MAX_PLAYERS = 2;
-    private List<Player> players;
+    private final List<Player> players;
     private List<String[][]> maps;
     private boolean hasStarted;
+    private boolean isWaiting;
     private GameStage gameStage;
 
     public Game() {
         players = Collections.synchronizedList(new LinkedList<Player>());
         maps = Collections.synchronizedList(new LinkedList<String[][]>());
         hasStarted = false;
+        isWaiting = false;
         gameStage = GameStage.SETUP;
     }
 
@@ -43,26 +46,27 @@ public class Game {
         synchronized (players) {
             if (!isFull()) {
                 players.add(player);
-                maps.add(MapHandler.getNewMap());
+                String[][] map = MapHandler.getNewMap();
+                maps.add(map);
+                player.setMap(map);
                 player.send(GAME_WELCOME + player.getUsername());
                 player.send(GAME_INFO);
                 getOponent(player).send(player.getUsername() + OPONENT_ARRIVAL);
-                return;
             }
         }
-    }
+   }
 
     public void start() {
         if (hasStarted) {
             return;
         }
 
-        Thread gameManagerPlayer1 = new Thread(new GameManager(players.get(0), maps.get(0)));
-        GameManager gameManagerPlayer2 = new GameManager(players.get(1), maps.get(1));
-
         //depending the state of the game different handlers will be called
         for (GameStage stage : GameStage.values()) {
             gameStage = stage;
+
+            Thread gameManagerPlayer1 = new Thread(new GameManager(players.get(0), maps.get(0)));
+            GameManager gameManagerPlayer2 = new GameManager(players.get(1), maps.get(1));
 
             send(gameStage.getInitialMessage());
 
@@ -93,6 +97,46 @@ public class Game {
         }
     }
 
+    public boolean hasCompletedMap() {
+        // TODO: 28/10/2019 abstract map to class board, and it can return a map :)
+        for (String[][] map : maps) {
+            if (isCompleted(map)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isCompleted(String[][] map) {
+        int hitCounter = 0;
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                hitCounter += map[i][j].equals(MapHandler.MoveType.HIT) ? 1 : 0;
+                System.out.println(hitCounter);
+            }
+        }
+
+        return hitCounter >= BoatType.getMaxHits();
+    }
+
+    public void waitOrNotifyOtherPlayer(Player player) {
+        synchronized (gameStage){
+            if(isWaiting){
+                send("You both are done, here are your choices: \n");
+                gameStage.notify();
+                isWaiting = false;
+                return;
+            }
+            try {
+                player.send("Please wait for " + getOponent(player).getUsername() + "'s choice...");
+                isWaiting = true;
+                gameStage.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
 
     private class GameManager implements Runnable {
@@ -107,7 +151,9 @@ public class Game {
 
         @Override
         public void run() {
+            System.out.println(gameStage.name());
             gameStage.getStageHandler().handle(Game.this, player, map);
+            System.out.println(gameStage.name() + " done");
         }
 
     }

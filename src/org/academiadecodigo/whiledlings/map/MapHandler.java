@@ -38,8 +38,8 @@ public class MapHandler {
         String[][] map = getNewMap();
         //paintCell(map, 3, 3, MoveType.MARK.symbol);
         //paintCell(map, 4, 4, MoveType.MISS.symbol);
-        System.out.println(buildInitial(map, BoatType.getInitialBoatsInfo(BoatType.CRUISER, ASK_POSITION)));
-        System.out.println(buildInitial(map, BoatType.getInitialBoatsInfo(BoatType.CRUISER, ASK_POSITION)));
+        System.out.println(buildInitial(map, BoatType.getInitialBoatsInfo(BoatType.CRUISER, ASK_BOAT_POSITION)));
+        System.out.println(buildInitial(map, BoatType.getInitialBoatsInfo(BoatType.CRUISER, ASK_BOAT_POSITION)));
         System.out.println(canMark(map, "C3", Direction.HORIZONTAL, BoatType.CRUISER));
         paintBoat(map, new Boat("C3", Direction.HORIZONTAL, BoatType.CRUISER, MoveType.MARK.getSymbol()));
         System.out.println(build(map));
@@ -60,7 +60,7 @@ public class MapHandler {
         for (int row = 0; row < map.length; row++) {
             initialMapBuilder.append(buildRow(map, row, false));
             initialMapBuilder.append(SPACE_BETWEEN_MAPS);
-            initialMapBuilder.append(infoList.toArray()[row+1]);
+            initialMapBuilder.append(infoList.toArray()[row + 1]);
             initialMapBuilder.append("\n");
 
         }
@@ -74,7 +74,7 @@ public class MapHandler {
 
         //LETTERS
         initialMapBuilder.append(buildLetters(map[0].length));
-        initialMapBuilder.append(ASK_POSITION + boatType.getName());
+        initialMapBuilder.append(ASK_BOAT_POSITION + boatType.getName());
         initialMapBuilder.append("\n");
 
 
@@ -211,8 +211,26 @@ public class MapHandler {
         return true;
     }
 
+    public static boolean canHitOrMiss(String[][] map, String position) {
+        int col = getColFromLetter(position.split("")[0]);
+        int row = getRowFromNumber(position.substring(1));
+
+        return (!map[col][row].equals(MoveType.HIT) && !map[col][row].equals(MoveType.MISS));
+    }
+
     public static void paintCell(String[][] map, int col, int row, String symbol) {
         map[col][row] = symbol;
+    }
+
+    public static boolean hit(String[][] map, int col, int row) {
+        // TODO: 28/10/2019 ternary
+        if (map[col][row].equals(MoveType.MARK.symbol)) {
+            map[col][row] = MoveType.HIT.symbol;
+            return true;
+        }
+        map[col][row] = MoveType.MISS.symbol;
+        return false;
+
     }
 
     public static void paintBoat(String[][] map, Boat boat) {
@@ -234,6 +252,7 @@ public class MapHandler {
         EMPTY(" ", ANSI_BLUE_BACKGROUND),
         MARK("X", ANSI_WHITE_BACKGROUND),
         HIT("H", ANSI_RED_BACKGROUND),
+        TRY("T", ANSI_YELLOW_BACKGROUND),
         MISS("M", ANSI_CYAN_BACKGROUND);
 
         private final String symbol;
