@@ -48,6 +48,7 @@ public class SetupHandler implements StageHandler {
         player.send(MapHandler.buildInitial(map, boatType));
         String position = player.ask(positionQuestion);
 
+
         //direction of boat
         int directionInt = player.ask(directionQuestion);
         Direction direction = Direction.values()[directionInt - 1];
