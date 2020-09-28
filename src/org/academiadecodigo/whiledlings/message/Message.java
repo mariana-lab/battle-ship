@@ -44,6 +44,8 @@ public class Message {
     public static final String GAME_INFO = ANSI_BLUE + "The game will start as soon as another player joins! :)\n" + ANSI_RESET;
     public static final String OPONENT_ARRIVAL = ANSI_BLUE + " has arrived for the battle!" + ANSI_RESET;
 
+    public static final String CLEAN_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+
     public static final String SETUP_INITIAL = ANSI_BLUE + "Ok, let's start to setup your map... Think wisely!" + ANSI_RESET;
     public static final String SETUP_FINAL = ANSI_BLUE + "Choices have been made, let's throw our cannon balls!" + ANSI_RESET;
     public static final String ROUNDS_INITIAL = ANSI_BLUE + "Round has started." + ANSI_RESET;
